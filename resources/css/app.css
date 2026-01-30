@@ -8,4 +8,31 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-gov-blue: #1351B4;
+    --color-gov-blue-dark: #0c3d8a;
+}
+
+.alto-contraste {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+.alto-contraste .bg-white,
+.alto-contraste .bg-gray-50,
+.alto-contraste nav {
+    background-color: #000 !important;
+    border-color: #fff !important;
+}
+
+.alto-contraste a,
+.alto-contraste button {
+    color: #ffff00 !important;
+    /* Amarelo para links no contraste */
+    text-decoration: underline !important;
+}
+
+.alto-contraste input {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
 }

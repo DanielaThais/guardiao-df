@@ -9,7 +9,7 @@ class PrivacyScanner
         $patterns = [
             'CPF'   => '/\d{3}\.\d{3}\.\d{3}-\d{2}/',
             'EMAIL' => '/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}/i',
-            'RG'    => '/\d{1,2}\.\d{3}\.\d{3}-[\dX]/i', // Padrão simplificado
+            'RG'    => '/\d{1,2}\.\d{3}\.\d{3}-[\dX]/i', 
         ];
 
         $achados = [];
@@ -18,7 +18,6 @@ class PrivacyScanner
         foreach ($patterns as $tipo => $regex) {
             if (preg_match_all($regex, $text, $matches)) {
                 $achados[$tipo] = $matches[0];
-                // Substitui o dado real por uma tag [REDAZIDO]
                 $maskedText = preg_replace($regex, "[REDAZIDO ($tipo)]", $maskedText);
             }
         }

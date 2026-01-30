@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\PrivacyScanner;
 use App\Models\GuardiaoDF;
-use App\Models\User; 
-use Illuminate\Support\Facades\Log; 
-use Illuminate\Support\Facades\Auth; 
-use Illuminate\Support\Facades\Hash; 
-use Illuminate\Support\Facades\Storage; 
-use Illuminate\Support\Facades\Validator; 
+use App\Models\User;
+use App\Models\Analise;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Smalot\PdfParser\Parser as PdfParser;
 use PhpOffice\PhpWord\IOFactory as WordIOFactory;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class GuardiaoDFController extends Controller
 {
@@ -29,81 +31,52 @@ class GuardiaoDFController extends Controller
 
     public function store(Request $request)
     {
-        $validator = \Validator::make($request->all(), [
+        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+        ], [
+            'password.min' => 'A senha precisa de no mínimo 8 caracteres.',
+            'password.confirmed' => 'As senhas não coincidem.',
+            'email.unique' => 'Este e-mail já está cadastrado.'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $user = \App\Models\User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => \Hash::make($request->password),
+            'password' => bcrypt($request->password),
         ]);
 
-        \Auth::login($user);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Cadastro realizado com sucesso!',
-            'redirect' => route('index')
-        ]);
+        return redirect()->route('login')->with('sucesso', 'Conta criada com sucesso!');
     }
 
     public function scan(Request $request, PrivacyScanner $scanner)
     {
         $request->validate([
             'texto' => 'nullable|string|min:5',
-            'documento' => 'nullable|file|mimes:pdf,docx,xlsx,csv,txt|max:10240', // 10MB
+            'documento' => 'nullable|file|mimes:pdf,docx,xlsx,csv,txt|max:10240',
         ]);
 
-        $conteudoParaAnalise = "";
-        $nomeArquivoOriginal = "Texto Manual";
-        $caminhoNoStorage = null;
-
-        if ($request->hasFile('documento')) {
-            $arquivo = $request->file('documento');
-            $nomeArquivoOriginal = $arquivo->getClientOriginalName();
-            $caminhoNoStorage = $arquivo->store('analises');
-
-            // Extração de texto aprimorada
-            $conteudoParaAnalise = $this->extrairTextoDoArquivo($arquivo);
-        } else {
-            $conteudoParaAnalise = $request->texto;
-        }
+        $conteudoParaAnalise = $request->hasFile('documento')
+            ? $this->extrairTextoDoArquivo($request->file('documento'))
+            : $request->texto;
 
         if (empty($conteudoParaAnalise)) {
-            return back()->withErrors(['erro' => 'O conteúdo enviado está vazio ou não pôde ser lido.']);
+            return back()->withErrors(['erro' => 'O conteúdo não pôde ser lido.']);
         }
 
         $resultado = $scanner->analisarTexto($conteudoParaAnalise);
 
-        // Foco em Auditoria e LGPD
         GuardiaoDF::create([
-            'user_id'             => Auth::id() ?? null,
-            'nome_arquivo'        => $nomeArquivoOriginal,
-            'caminho_storage'     => $caminhoNoStorage,
-            'texto_original'      => $conteudoParaAnalise,
-            'texto_mascarado'     => $resultado['mascarado'],
-            'score_risco'         => $resultado['score'],
+            'user_id' => Auth::id(),
+            'nome_arquivo' => $request->file('documento') ? $request->file('documento')->getClientOriginalName() : "Texto Manual",
+            'texto_original' => $conteudoParaAnalise,
+            'texto_mascarado' => $resultado['mascarado'], // Salva apenas o conteúdo seguro
+            'score_risco' => $resultado['score'],
             'dados_identificados' => json_encode($resultado['achados']),
-            'data_analise'        => now(),
         ]);
 
-        return back()->with('sucesso', [
-            'original'  => $conteudoParaAnalise,
-            'mascarado' => $resultado['mascarado'],
-            'score'     => $resultado['score'],
-            'achados'   => $resultado['achados'],
-            'arquivo'   => $nomeArquivoOriginal
-        ]);
+        return redirect()->route('relatorios')->with('sucesso', 'Análise concluída com sucesso!');
     }
 
     private function extrairTextoDoArquivo($arquivo)
@@ -167,5 +140,11 @@ class GuardiaoDFController extends Controller
             }
         }
         return $texto;
+    }
+
+    public function historico()
+    {
+        $relatorios = Analise::where('user_id', Auth::id())->latest()->get();
+        return view('relatorios', compact('relatorios'));
     }
 }

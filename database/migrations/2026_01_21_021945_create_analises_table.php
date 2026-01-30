@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('analises', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); 
-            $table->string('nome_arquivo'); 
-            $table->string('caminho'); 
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('nome_arquivo');
             $table->longText('conteudo_mascarado'); 
-            $table->integer('score_risco'); 
-            $table->json('dados_identificados'); 
+            $table->integer('score_risco');
+            $table->json('dados_identificados');
             $table->timestamps();
         });
     }

@@ -8,20 +8,53 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    @extends('layouts.app')
 
-    <nav class="bg-blue-900 p-4 text-white shadow-md">
+    @section('title', 'Login')
+
+    @section('content')
+    <nav class="bg-[#1351B4] p-4 text-white shadow-md">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-xl font-bold tracking-tight">
-                <a href="{{ route('index') }}">🛡️ GUARDIÃO DF <span class="font-light text-blue-300">| Scanner</span></a>
+                <a href="{{ route('index') }}">GUARDIÃO DF</a>
             </h1>
-            <a href="{{ route('index') }}" class="text-sm bg-blue-800 hover:bg-blue-700 px-3 py-1 rounded transition">
-                Voltar ao Início
-            </a>
+
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleContraste()" class="text-[10px] font-bold flex items-center gap-1 hover:text-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707" />
+                        </svg>
+                        ALTO CONTRASTE
+                    </button>
+
+                    <div class="flex gap-2">
+                        <button onclick="mudarFonte('aumentar')" class="text-xs font-bold px-1 border border-gray-400 hover:bg-gray-200" title="Aumentar fonte">A+</button>
+                        <button onclick="mudarFonte('diminuir')" class="text-xs font-bold px-1 border border-gray-400 hover:bg-gray-200" title="Diminuir fonte">A-</button>
+                    </div>
+                </div>
+                @auth
+                <span class="text-sm">Olá, {{ Auth::user()->name }}</span>
+                <a href="{{ route('index') }}"
+                    class="inline-flex items-center justify-center text-sm bg-[#2670E8] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
+                    Voltar ao Início
+                </a>
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button aria-label type="submit"
+                        class="inline-flex items-center justify-center text-sm bg-[#2670E8] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
+                        Sair
+                    </button>
+                </form>
+                @else
+                <a href="{{ route('login') }}" class="hover:text-blue-200">Entrar</a>
+                @endauth
+            </div>
         </div>
     </nav>
 
-    <main class="container mx-auto mt-8 p-4">
+        <main id="conteudo-principal" class="container mx-auto mt-16 p-4 flex-grow justify-center">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex items-center space-x-2 mb-4 text-blue-800">
                 <span>🔍</span>
@@ -31,7 +64,7 @@
             <form action="{{ route('scan') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2 italic">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
                         Insira o texto ou conteúdo do e-SIC para identificar dados sensíveis <span class="text-red-500">*</span>:
                     </label>
                     <textarea
@@ -61,15 +94,15 @@
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-full file:border-0
                         file:text-sm file:font-semibold
-                        file:bg-blue-700 file:text-white
-                        hover:file:bg-blue-800 transition cursor-pointer">
+                        file:bg-[#2670E8] file:text-white
+                        hover:file:bg-[#0C326F] transition cursor-pointer">
 
                     <p class="mt-2 text-xs text-blue-600 italic">
                         * O sistema processará o texto contido no arquivo automaticamente.
                     </p>
                 </div>
 
-                <button type="submit" class="w-full md:w-auto bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-8 mt-3 rounded-lg shadow transition duration-200">
+                <button aria-label type="submit" class="bg-[#2670E8] hover:bg-[#0C326F] text-white font-bold py-3 mt-3 px-8 rounded-lg shadow transition duration-200">
                     Iniciar Varredura
                 </button>
             </form>
@@ -79,10 +112,54 @@
         </div>
     </main>
 
-    <footer class="text-center mt-12 text-gray-400 text-xs uppercase tracking-widest italic pb-8">
-        Guardião DF - Protegendo a privacidade do cidadão.
-    </footer>
+    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#1351B4]">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div>
+                    <h4 class="font-bold text-[#E6F4EA] mb-4 border-b border-green-400 pb-2">Participa DF</h4>
 
+                    <ul class="space-y-2 text-sm text-[#E6F4EA]">
+                        <li><a href="https://cg.df.gov.br/a-controladoria-geral-do-distrito-federal" class="hover:underline transition">A CGDF</a></li>
+                        <li><a href="https://cg.df.gov.br/relatorios-de-auditorias" class="hover:underline transition">Auditorias e Inspeções</a></li>
+                        <li><a href="https://cg.df.gov.br/transparencia-e-combate-a-corrupcao" class="hover:underline transition">Transparência e Controle Social</a></li>
+                        <li><a href="https://cg.df.gov.br/category/carta-de-servicos" class="hover:underline transition">Serviços</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-[#E6F4EA] mb-4 border-b border-green-400 pb-2">Canais de Ajuda</h4>
+
+                    <ul class="space-y-2 text-sm text-blue-100">
+                        <li><a href="https://cg.df.gov.br/fale-com-a-secretaria/" class="hover:underline transition">Fale com a Secretaria</a></li>
+                        <li><a href="https://cg.df.gov.br/category/acesso-a-informacao/" class="hover:underline transition">Acesso à Informação</a></li>
+                        <li><a href="https://www.participa.df.gov.br/" class="hover:underline transition">Ouvidoria</a></li>
+                        <li><a href="https://cg.df.gov.br/category/imprensa" class="hover:underline transition">Comunicação</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-[#E6F4EA] mb-4 border-b border-green-400 pb-2">Localização</h4>
+                    <p class="text-sm text-[#E6F4EA] leading-relaxed">
+                        Anexo do Palácio do Buriti, 13º andar<br>
+                        CEP: 70075-900 | Brasília - DF
+                    </p>
+                    <a href="https://cg.df.gov.br/category/acesso-a-informacao/">
+                        <div class="mt-6 flex items-center gap-4">
+                            <div class="bg-white p-2 rounded-full w-12 h-12 flex items-center justify-center">
+                                <span class="text-black font-black text-xl italic">i</span>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider">Acesso à<br>Informação</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-green-800 text-center text-xs text-green-300 uppercase tracking-widest">
+                Governo do Distrito Federal - Segurança e Privacidade de Dados
+            </div>
+        </div>
+    </footer>
+    @endsection
 </body>
 
 </html>
