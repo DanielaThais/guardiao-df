@@ -15,11 +15,18 @@
     @section('title', 'Login')
 
     @section('content')
-    <nav class="bg-[#1351B4] p-4 text-white shadow-md" role="navigation" aria-label="Menu Principal">
+    <nav class="bg-[#044c9c] p-4 text-white shadow-md" role="navigation" aria-label="Menu Principal">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">
-                <a href="{{ route('index') }}" aria-label="Ir para a página inicial do Guardião DF">GUARDIÃO DF</a>
-            </h1>
+            <div class="flex items-center gap-4">
+                <img src="https://www.df.gov.br/wp-conteudo/themes/templategdf/img/logogdf_1.svg"
+                    alt="Logo GDF"
+                    class="h-10 w-auto">
+
+                <div class="h-8 w-px bg-white/30"></div>
+                <h1 class="text-xl font-bold tracking-tight">
+                    <a href="{{ route('index') }}">GUARDIÃO DF</a>
+                </h1>
+            </div>
         </div>
     </nav>
 
@@ -81,7 +88,7 @@
             </form>
 
             <p class="mt-6 text-center text-sm text-gray-600">
-                Não tem conta? <a href="{{ route('cadastro') }}" class="text-[#1351B4] font-bold hover:underline">Criar nova conta</a>
+                Não tem conta? <a href="{{ route('cadastro') }}" class="text-[#044c9c] font-bold hover:underline">Criar nova conta</a>
             </p>
 
             @if(session('erro'))
@@ -89,7 +96,7 @@
             @endif
         </div>
     </main>
-    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#1351B4]">
+    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#0464ac]">
         <div class="container mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div>

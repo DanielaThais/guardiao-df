@@ -14,15 +14,22 @@
     @section('title', 'Login')
 
     @section('content')
-    <nav class="bg-[#1351B4] p-4 text-white shadow-md">
+    <nav class="bg-[#044c9c] p-4 text-white shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">
-                <a href="{{ route('index') }}">GUARDIÃO DF</a>
-            </h1>
+            <div class="flex items-center gap-4">
+                <img src="https://www.df.gov.br/wp-conteudo/themes/templategdf/img/logogdf_1.svg"
+                    alt="Logo GDF"
+                    class="h-10 w-auto">
+
+                <div class="h-8 w-px bg-white/30"></div>
+                <h1 class="text-xl font-bold tracking-tight">
+                    <a href="{{ route('index') }}">GUARDIÃO DF</a>
+                </h1>
+            </div>
         </div>
     </nav>
 
-    <main id="conteudo-principal" class="container mx-auto mt-16 p-4 flex-grow justify-center">
+    <main id="conteudo-principal" class="container mx-auto mt-16 p-4 flex justify-center">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 w-full max-w-md">
             <h2 class="text-xl font-semibold text-gray-800 mb-6 text-center">Cadastro</h2>
 
@@ -66,18 +73,18 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full mt-6 bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg shadow transition duration-200">
+                <button type="submit" class="w-full mt-6 bg-[#044c9c] hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg shadow transition duration-200">
                     Registrar no Sistema
                 </button>
             </form>
 
             <p class="mt-6 text-center text-sm text-gray-600">
-                Já possui acesso? <a href="{{ route('login') }}" class="text-blue-700 font-bold hover:underline">Faça login</a>
+                Já possui acesso? <a href="{{ route('login') }}" class="text-[#044c9c] font-bold hover:underline">Faça login</a>
             </p>
         </div>
     </main>
 
-    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#1351B4]">
+    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#0464ac]">
         <div class="container mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div>

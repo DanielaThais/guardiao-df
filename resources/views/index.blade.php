@@ -14,18 +14,26 @@
     @section('title', 'Login')
 
     @section('content')
-    <nav class="bg-[#1351B4] p-4 text-white shadow-md">
+    <nav class="bg-[#044c9c] p-4 text-white shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">
-                <a href="{{ route('index') }}">GUARDIÃO DF</a>
-            </h1>
+            <div class="flex items-center gap-4">
+                <img src="https://www.df.gov.br/wp-conteudo/themes/templategdf/img/logogdf_1.svg"
+                    alt="Logo GDF"
+                    class="h-10 w-auto">
+
+                <div class="h-8 w-px bg-white/30"></div>
+                <h1 class="text-xl font-bold tracking-tight">
+                    <a href="{{ route('index') }}">GUARDIÃO DF</a>
+                </h1>
+            </div>
+
             <div class="flex items-center space-x-4">
                 @auth
                 <span class="text-sm">Olá, {{ Auth::user()->name }}</span>
                 <form action="{{ route('logout') }}" method="POST" class="inline">
                     @csrf
                     <button aria-label type="submit"
-                        class="inline-flex items-center justify-center text-sm bg-[#2670E8] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
+                        class="inline-flex items-center justify-center text-sm bg-[#0464ac] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
                         Sair
                     </button>
                 </form>
@@ -43,7 +51,7 @@
                 "Segurança para quem informa, privacidade para quem é citado."
             </p>
             <p class="text-gray-600 max-w-2xl mx-auto">
-                O <strong>Guardião DF</strong> é uma plataforma inteligente projetada para apoiar os órgãos do Distrito Federal na gestão de documentos públicos. Através de modelos avançados de Inteligência Artificial, o sistema identifica automaticamente dados sensíveis (como CPFs, endereços e contatos pessoais) em textos de processos e ouvidorias, sugerindo o mascaramento necessário para garantir a conformidade com a <strong>LGPD</strong>.
+                O <strong>Guardião DF</strong> é uma plataforma inteligente projetada para apoiar os órgãos do Distrito Federal na gestão de documentos públicos. Através de modelos de Inteligência, o sistema identifica automaticamente dados sensíveis (como CPFs, endereços e contatos pessoais) em textos de processos e ouvidorias, sugerindo o mascaramento necessário para garantir a conformidade com a <strong>LGPD</strong>.
             </p>
         </div>
 
@@ -93,7 +101,7 @@
         </div>
     </main>
 
-    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#1351B4]">
+    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#0464ac]">
         <div class="container mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div>

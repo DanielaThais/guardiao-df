@@ -14,6 +14,7 @@ class Analise extends Model
         'conteudo_original',
         'conteudo_mascarado',
         'score_risco',
-        'dados_identificados'
+        'dados_identificados',
+        'caminho_arquivo',
     ];
 }

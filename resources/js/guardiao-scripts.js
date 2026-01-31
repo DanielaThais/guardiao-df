@@ -112,7 +112,7 @@ function toggleContraste() {
     localStorage.setItem('contraste', ativo);
 }
 
-let tamanhoFonte = 100; 
+let tamanhoFonte = 100;
 function mudarFonte(acao) {
     const el = document.documentElement; /
     if (acao === 'aumentar' && tamanhoFonte < 150) tamanhoFonte += 10;
@@ -120,8 +120,21 @@ function mudarFonte(acao) {
     el.style.fontSize = tamanhoFonte + "%";
 }
 
-window.onload = function() {
+window.onload = function () {
     if (localStorage.getItem('contraste') === 'true') {
         document.body.classList.add('alto-contraste');
     }
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+    const formScan = document.getElementById('formScan');
+    if (formScan) {
+        formScan.addEventListener('submit', function () {
+            const btn = this.querySelector('button[type="submit"]');
+            // Desabilita o botão para evitar duplo clique e mostra a ampulheta
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-spin mr-2">⏳</span> Processando Dados...';
+        });
+    }
+});
+

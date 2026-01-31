@@ -15,13 +15,54 @@
     @section('title', 'Meus Relatórios')
 
     @section('content')
-    <nav class="bg-[#1351B4] p-4 text-white shadow-md">
+    <nav class="bg-[#044c9c] p-4 text-white shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">GUARDIÃO DF - Painel</h1>
-            <a href="{{ route('index') }}"
-                class="inline-flex items-center justify-center text-sm bg-[#2670E8] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
-                Nova Análise
-            </a>
+
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <img src="https://www.df.gov.br/wp-conteudo/themes/templategdf/img/logogdf_1.svg"
+                        alt="Logo GDF"
+                        class="h-10 w-auto">
+
+                    <div class="h-8 w-px bg-white/30"></div>
+                    <h1 class="text-xl font-bold tracking-tight">
+                        <a href="{{ route('index') }}">GUARDIÃO DF</a>
+                    </h1>
+                </div>
+
+
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-4">
+                        <button onclick="toggleContraste()" class="text-[10px] font-bold flex items-center gap-1 hover:text-blue-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707" />
+                            </svg>
+                            ALTO CONTRASTE
+                        </button>
+
+                        <div class="flex gap-2">
+                            <button onclick="mudarFonte('aumentar')" class="text-xs font-bold px-1 border border-gray-400 hover:bg-gray-200" title="Aumentar fonte">A+</button>
+                            <button onclick="mudarFonte('diminuir')" class="text-xs font-bold px-1 border border-gray-400 hover:bg-gray-200" title="Diminuir fonte">A-</button>
+                        </div>
+                    </div>
+                    @auth
+                    <span class="text-sm">Olá, {{ Auth::user()->name }}</span>
+                    <a href="{{ route('index') }}"
+                        class="inline-flex items-center justify-center text-sm bg-[#0464ac] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
+                        Nova Análise
+                    </a>
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button aria-label type="submit"
+                            class="inline-flex items-center justify-center text-sm bg-[#0464ac] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
+                            Sair
+                        </button>
+                    </form>
+                    @else
+                    <a href="{{ route('login') }}" class="hover:text-blue-200">Entrar</a>
+                    @endauth
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -33,7 +74,7 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse" role="table" aria-label="Tabela de relatórios processados">
+                <table class="w-full text-left border-collapse">
                     <thead class="bg-gray-50 uppercase text-xs font-bold text-gray-600">
                         <tr>
                             <th class="p-4 border-b">Arquivo</th>
@@ -43,20 +84,54 @@
                             <th class="p-4 border-b text-right">Ações</th>
                         </tr>
                     </thead>
+
                     <tbody class="text-gray-700">
                         @forelse($relatorios as $relatorio)
-                        <tr>
+                        <tr class="hover:bg-gray-50 transition border-b border-gray-100">
                             <td class="p-4">{{ $relatorio->nome_arquivo }}</td>
-                            <td class="p-4">
-                                @foreach(json_decode($relatorio->dados_identificados) as $tipo)
-                                <span class="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded">{{ $tipo }}</span>
-                                @endforeach
+                            <td class="p-4 text-center">
+                                <span class="font-bold {{ $relatorio->score_risco > 50 ? 'text-red-600' : 'text-green-600' }}">
+                                    {{ $relatorio->score_risco }}%
+                                </span>
                             </td>
-                            <td class="p-4">{{ $relatorio->created_at->format('d/m/Y') }}</td>
+
+                            <td class="p-4">
+                                <div class="flex flex-wrap gap-1">
+                                    @php
+                                    $rawDados = $relatorio->dados_identificados;
+                                    $dados = is_array($rawDados) ? $rawDados : json_decode($rawDados, true);
+                                    @endphp
+
+                                    @if(!empty($dados) && is_array($dados))
+                                    @foreach($dados as $item)
+                                    <span class="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded shadow-sm">
+                                        {{ is_array($item) ? implode(', ', $item) : $item }}
+                                    </span>
+                                    @endforeach
+                                    @else
+                                    <span class="text-gray-400 text-[10px] italic">Nenhum dado sensível</span>
+                                    @endif
+                                </div>
+                            </td>
+
+                            <td class="p-4 text-sm">{{ $relatorio->created_at->format('d/m/Y') }}</td>
+                            <td class="p-4 text-right space-x-2">
+                                <a href="{{ route('analise.pdf', $relatorio->id) }}"
+                                    class="inline-flex items-center text-blue-600 hover:text-blue-800 font-bold text-xs bg-blue-50 px-2 py-1 rounded">
+                                    PDF 📄
+                                </a>
+
+                                @if($relatorio->caminho_arquivo)
+                                <a href="{{ Storage::url($relatorio->caminho_arquivo) }}" target="_blank"
+                                    class="inline-flex items-center text-green-600 hover:text-green-800 font-bold text-xs bg-green-50 px-2 py-1 rounded">
+                                    ORIGINAL 📂
+                                </a>
+                                @endif
+                            </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="3" class="text-center p-8 text-gray-400 italic">
+                            <td colspan="5" class="text-center p-8 text-gray-400 italic">
                                 Nenhuma análise encontrada no seu histórico.
                             </td>
                         </tr>
@@ -67,7 +142,7 @@
         </div>
     </main>
 
-    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#1351B4]">
+    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#0464ac]">
         <div class="container mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div>
@@ -115,6 +190,14 @@
         </div>
     </footer>
     @endsection
+
+    @if(session('download_id'))
+    <script>
+        window.onload = function() {
+            window.location.href = "{{ route('analise.pdf', session('download_id')) }}";
+        }
+    </script>
+    @endif
 </body>
 
 </html>

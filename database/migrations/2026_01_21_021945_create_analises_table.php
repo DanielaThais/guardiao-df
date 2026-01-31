@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('nome_arquivo');
+            $table->longText('conteudo_original');
             $table->longText('conteudo_mascarado'); 
             $table->integer('score_risco');
+            $table->string('caminho_arquivo')->nullable();
             $table->json('dados_identificados');
             $table->timestamps();
         });

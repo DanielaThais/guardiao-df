@@ -84,3 +84,5 @@ Route::post('/scan', [GuardiaoDFController::class, 'scan'])->name('scan');
 Route::get('/relatorios', [GuardiaoDFController::class, 'historico'])
     ->name('relatorios')
     ->middleware('auth');
+
+Route::get('/analise/pdf/{id}', [GuardiaoDFController::class, 'gerarPdf'])->name('analise.pdf');

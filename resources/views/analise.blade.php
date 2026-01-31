@@ -14,11 +14,18 @@
     @section('title', 'Login')
 
     @section('content')
-    <nav class="bg-[#1351B4] p-4 text-white shadow-md">
+    <nav class="bg-[#044c9c] p-4 text-white shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">
-                <a href="{{ route('index') }}">GUARDIÃO DF</a>
-            </h1>
+            <div class="flex items-center gap-4">
+                <img src="https://www.df.gov.br/wp-conteudo/themes/templategdf/img/logogdf_1.svg"
+                    alt="Logo GDF"
+                    class="h-10 w-auto">
+
+                <div class="h-8 w-px bg-white/30"></div>
+                <h1 class="text-xl font-bold tracking-tight">
+                    <a href="{{ route('index') }}">GUARDIÃO DF</a>
+                </h1>
+            </div>
 
             <div class="flex items-center space-x-4">
                 <div class="flex items-center space-x-4">
@@ -37,13 +44,13 @@
                 @auth
                 <span class="text-sm">Olá, {{ Auth::user()->name }}</span>
                 <a href="{{ route('index') }}"
-                    class="inline-flex items-center justify-center text-sm bg-[#2670E8] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
+                    class="inline-flex items-center justify-center text-sm bg-[#0464ac] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
                     Voltar ao Início
                 </a>
                 <form action="{{ route('logout') }}" method="POST" class="inline">
                     @csrf
                     <button aria-label type="submit"
-                        class="inline-flex items-center justify-center text-sm bg-[#2670E8] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
+                        class="inline-flex items-center justify-center text-sm bg-[#0464ac] hover:bg-[#1351B4] px-4 h-9 rounded transition font-medium text-white">
                         Sair
                     </button>
                 </form>
@@ -54,14 +61,14 @@
         </div>
     </nav>
 
-        <main id="conteudo-principal" class="container mx-auto mt-16 p-4 flex-grow justify-center">
+    <main id="conteudo-principal" class="container mx-auto mt-16 p-4 flex-grow justify-center">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex items-center space-x-2 mb-4 text-blue-800">
                 <span>🔍</span>
                 <h2 class="text-lg font-semibold text-gray-800">Nova Varredura de Conteúdo</h2>
             </div>
 
-            <form action="{{ route('scan') }}" method="POST">
+            <form action="{{ route('scan') }}" method="POST" enctype="multipart/form-data" id="formScan">
                 @csrf
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -94,15 +101,15 @@
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-full file:border-0
                         file:text-sm file:font-semibold
-                        file:bg-[#2670E8] file:text-white
+                        file:bg-[#0464ac] file:text-white
                         hover:file:bg-[#0C326F] transition cursor-pointer">
 
-                    <p class="mt-2 text-xs text-blue-600 italic">
+                    <p class="mt-2 text-xs text-bg[#0464ac] italic">
                         * O sistema processará o texto contido no arquivo automaticamente.
                     </p>
                 </div>
 
-                <button aria-label type="submit" class="bg-[#2670E8] hover:bg-[#0C326F] text-white font-bold py-3 mt-3 px-8 rounded-lg shadow transition duration-200">
+                <button type="submit" class="bg-[#0464ac] hover:bg-[#0C326F] text-white font-bold py-3 px-8 py-3 mt-3 rounded-lg shadow transition">
                     Iniciar Varredura
                 </button>
             </form>
@@ -112,7 +119,7 @@
         </div>
     </main>
 
-    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#1351B4]">
+    <footer class="bg-[#50bc7c] text-[#E6F4EA] mt-20 border-t-4 border-[#0464ac]">
         <div class="container mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div>
