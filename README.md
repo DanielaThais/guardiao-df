@@ -112,3 +112,11 @@ Além das bibliotecas PHP, o servidor onde o projeto será executado precisa ter
 - ext-gd / ext-imagick: Úteis para o processamento de imagens e geração de PDFs.
 - ext-mbstring: Para garantir que nomes com acentos (como o "Júlio Cesar") sejam processados corretamente sem erros de codificação.
 
+---
+
+## ▶️ Prévia do projeto
+
+<video width="640" height="360" controls>
+  <source src="assets/Guardiao.mp4" type="video/mp4">
+  Seu navegador não suporta a tag de vídeo.
+</video>
