@@ -116,7 +116,4 @@ Além das bibliotecas PHP, o servidor onde o projeto será executado precisa ter
 
 ## ▶️ Prévia do projeto
 
-<video width="640" height="360" controls>
-  <source src="assets/Guardiao.mp4" type="video/mp4">
-  Seu navegador não suporta a tag de vídeo.
-</video>
+[![Prévia do Guardião DF](https://img.youtube.com/vi/awh6LbhSsPo/0.jpg)](https://www.youtube.com/watch?v=awh6LbhSsPo) 
